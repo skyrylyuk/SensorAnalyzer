@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+
+    id 'java'
+}
+
+group = 'com.github.skyrylyuk'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = JavaVersion.VERSION_11
+
+//sparkVersion = '2.4.5'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter') 
+//            { exclude group: 'ch.qos.logback', module: 'logback-classic' }
+    
+    implementation('org.apache.spark:spark-core_2.12:2.4.5') {
+        exclude group: 'org.slf4j', module: 'slf4j-log4j12'
+        exclude group: 'log4j', module: 'log4j'
+    }
+    implementation('org.apache.spark:spark-sql_2.12:2.4.5') {
+        exclude group: 'org.codehaus.janino', module: 'janino'
+    }
+
+    compile 'org.codehaus.janino:janino:3.0.8'
+    compile 'org.codehaus.janino:commons-compiler:3.0.8'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+bootRun {
+    if (project.hasProperty('args')) {
+        args project.args.split(',')
+    }
+}
+
+test {
+    useJUnitPlatform()
+}
